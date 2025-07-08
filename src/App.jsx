@@ -11,16 +11,8 @@ import About from './components/About';
 import Contacts from './components/Contacts';
 import Posts from './components/Posts';
 import SanctumDashboard from './components/SanctumDashboard';
-import BattleArenaWorking from './components/BattleArenaWorking';
-import BattleArenaHTML from './components/BattleArenaHTML';
 import BattleArenaEnhanced from './components/BattleArenaEnhanced';
-import BattleTest from './components/BattleTest';
-import BattleArenaSimple from './components/BattleArenaSimple';
-import BattleArenaTest from './components/battle-arena-test';
-import TestNavigation from './components/TestNavigation';
-import Gallery from './components/gallery';
 import SignupPage from './pages/signup';
-import ImageTest from './components/ImageTest';
 
 function AppContent() {
   const { user, loading, token } = useAuth();
@@ -42,12 +34,7 @@ function AppContent() {
         <Route path="/contact" element={<Contacts />} />
         <Route path="/posts/:post_id" element={<Posts />} />
         <Route path="/battle" element={user ? <BattleArenaEnhanced /> : <Navigate to="/" />} />
-        <Route path="/battle-working" element={user ? <BattleArenaWorking /> : <Navigate to="/" />} />
-        <Route path="/battle-test" element={<BattleArenaTest />} />
-        <Route path="/test-nav" element={<TestNavigation />} />
-        <Route path="/gallery" element={<Gallery />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/image-test" element={<ImageTest />} />
 
       </Routes>
     </div>
