@@ -17,7 +17,7 @@ const BattleArenaEnhanced = () => {
   const [creatures, setCreatures] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  //test line
+  //test lin
   const battleInterval = useRef(null);
 
   // Game constants
