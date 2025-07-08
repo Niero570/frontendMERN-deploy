@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../../mern-petstore/src/content/authContent';
-import Footer from '../../../mern-petstore/src/components/Footer';
+import { useAuth } from '../content/authContent';
+import Footer from './Footer';
 
 const BattleArenaWorking = () => {
   const { token } = useAuth();
