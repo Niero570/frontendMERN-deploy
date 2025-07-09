@@ -69,7 +69,7 @@ const BattleArenaEnhanced = () => {
   const fetchUserCreatures = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/auth/sanctum', {
+      const response = await fetch('https://backendmern-ugqz.onrender.com/api/auth/sanctum', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -580,8 +580,8 @@ const BattleArenaEnhanced = () => {
       <div className="page-container">
         <div style={{ textAlign: 'center', padding: '40px', color: 'white' }}>
           <h2>⚠️ {error}</h2>
-          <p>Visit the gallery to collect creatures first!</p>
-          <a href="/gallery" style={{ color: '#ffd700', textDecoration: 'underline' }}>🎯 Begin Hunt</a>
+          <p>Visit the collection to collect creatures first!</p>
+          <a href="/collection" style={{ color: '#ffd700', textDecoration: 'underline' }}>🎯 Begin Hunt</a>
         </div>
         <Footer />
       </div>
@@ -594,8 +594,8 @@ const BattleArenaEnhanced = () => {
       <div className="page-container">
         <div style={{ textAlign: 'center', padding: '40px', color: 'white' }}>
           <h2>⚠️ No Creatures Available</h2>
-          <p>You need creatures to battle! Visit the gallery to collect some.</p>
-          <a href="/gallery" style={{ color: '#ffd700', textDecoration: 'underline' }}>🎯 Begin Hunt</a>
+          <p>You need creatures to battle! Visit the collection to collect some.</p>
+          <a href="/collection" style={{ color: '#ffd700', textDecoration: 'underline' }}>🎯 Begin Hunt</a>
         </div>
         <Footer />
       </div>

@@ -24,7 +24,7 @@ function Footer() {
             <a href="/" style={footerLinkStyles}>🏠 Home</a>
             <a href="/about" style={footerLinkStyles}>📖 About</a>
             <a href="/contact" style={footerLinkStyles}>📬 Contact</a>
-            <a href="/gallery" style={footerLinkStyles}>🖼️ Gallery</a>
+            <a href="/collection" style={footerLinkStyles}>🖼️ Collection</a>
           </div>
         </div>
 

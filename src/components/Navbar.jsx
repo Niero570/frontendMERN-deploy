@@ -23,7 +23,7 @@ function Navbar() {
           <Link to="/" style={navLinkStyles}>🏠 Home</Link>
           <Link to="/about" style={navLinkStyles}>📖 About</Link>
           <Link to="/contact" style={navLinkStyles}>📬 Contact</Link>
-          <Link to="/gallery" style={navLinkStyles}>🔮 Collection</Link>
+          <Link to="/collection" style={navLinkStyles}>🔮 Collection</Link>
           {user && <Link to="/sanctum" style={navLinkStyles}>🏛️ Sanctum</Link>}
           {user && <Link to="/battle" style={battleLinkStyles}>⚔️ Battle Arena</Link>}
           {user && <Link to="/dashboard" style={navLinkStyles}>👤 Dashboard</Link>}
@@ -70,7 +70,7 @@ function Navbar() {
           <Link to="/contact" style={mobileNavLinkStyles} onClick={() => setIsMenuOpen(false)}>
             📬 Contact
           </Link>
-          <Link to="/gallery" style={mobileNavLinkStyles} onClick={() => setIsMenuOpen(false)}>
+          <Link to="/collection" style={mobileNavLinkStyles} onClick={() => setIsMenuOpen(false)}>
             🔮 Collection
           </Link>     
           {user && (

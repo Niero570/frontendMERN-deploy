@@ -12,7 +12,7 @@ function SanctumDashboard() {
   useEffect(() => {
     const getSanctum = async () => {
       try {
-        const response = await fetch('/api/auth/sanctum', {
+        const response = await fetch('https://backendmern-ugqz.onrender.com/api/auth/sanctum', {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -168,8 +168,8 @@ function SanctumDashboard() {
           <div style={emptyCollectionStyles}>
             <div style={emptyIconStyles}>📭</div>
             <h3>Your Sanctum Awaits</h3>
-            <p>No creatures in your Sanctum yet. Visit the gallery to start your collection!</p>
-            <a href="/gallery" style={collectionLinkStyles}>
+            <p>No creatures in your Sanctum yet. Visit the collection to start your collection!</p>
+            <a href="/collection" style={collectionLinkStyles}>
               🎯 Begin Hunt
             </a>
           </div>

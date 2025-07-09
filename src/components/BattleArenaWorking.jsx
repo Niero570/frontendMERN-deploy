@@ -25,7 +25,7 @@ const BattleArenaWorking = () => {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('/api/auth/sanctum', {
+      const response = await fetch('https://backendmern-ugqz.onrender.com/api/auth/sanctum', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -66,7 +66,7 @@ const BattleArenaWorking = () => {
       setError(null);
       setBattleResult(null);
 
-      const response = await fetch('/api/auth/sanctum-battle/setup', {
+      const response = await fetch('https://backendmern-ugqz.onrender.com/api/auth/sanctum-battle/setup', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -103,7 +103,7 @@ const BattleArenaWorking = () => {
       setBattling(true);
       setError(null);
 
-      const response = await fetch('/api/auth/battle/execute', {
+      const response = await fetch('https://backendmern-ugqz.onrender.com/api/auth/battle/execute', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -199,7 +199,7 @@ const BattleArenaWorking = () => {
           <div style={errorContainerStyles}>
             <h2>⚠️ No Creatures Available</h2>
             <p>You need to collect some creatures before you can battle!</p>
-            <p>Visit the <a href="/gallery" style={linkStyles}>Gallery</a> to collect creatures.</p>
+            <p>Visit the <a href="/collection" style={linkStyles}>Collection</a> to collect creatures.</p>
           </div>
         </div>
         <Footer />

@@ -27,7 +27,7 @@ const Home = () => {
               <Link to="/signup" style={secondaryButtonStyles}>
                 🔮 Start Collecting
               </Link>
-              <Link to="/gallery" style={tertiaryButtonStyles}>
+              <Link to="/collection" style={tertiaryButtonStyles}>
                 👁️ View Collection
               </Link>
             </div>
@@ -116,7 +116,7 @@ const Home = () => {
             </div>
             <div style={loreCallToActionStyles}>
               <h3 style={ctaTitleStyles}>Will you rise to become a Master Collector?</h3>
-              <Link to="/gallery" style={ctaButtonStyles}>
+              <Link to="/collection" style={ctaButtonStyles}>
                 🔮 Start Your Collection
               </Link>
             </div>

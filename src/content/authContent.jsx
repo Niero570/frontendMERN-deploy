@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
 
     const verifyToken = async () => {
         try {
-            const response = await fetch('/api/auth/verify', {
+            const response = await fetch('https://backendmern-ugqz.onrender.com/api/auth/verify', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const response = await fetch('/api/auth/login', {
+            const response = await fetch('https://backendmern-ugqz.onrender.com/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (username, email, password) => {
         try {
-            const response = await fetch('/api/auth/signup', {
+            const response = await fetch('https://backendmern-ugqz.onrender.com/api/auth/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
