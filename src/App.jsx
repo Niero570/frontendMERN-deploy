@@ -10,7 +10,6 @@ import Home from './components/Home';
 import About from './components/About';
 import Contacts from './components/Contacts';
 import Posts from './components/Posts';
-import Dashboard from './components/Dashboard';
 import BattleArenaEnhanced from './components/BattleArenaEnhanced';
 import SignupPage from './pages/signup';
 
