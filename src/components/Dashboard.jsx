@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../content/authContent';
-import { useNavigate } from 'react-router-dom';
 import styles from './Dashboard.module.css';
 
 export default function Dashboard() {
   const { user, token } = useAuth();
-  const navigate = useNavigate();
   const [userPets, setUserPets] = useState([]);
   const [sanctumInfo, setSanctumInfo] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,7 +17,7 @@ export default function Dashboard() {
   const fetchUserData = async () => {
     try {
       // Fetch user's sanctum info
-      const response = await fetch('/api/auth/sanctum', {
+      const response = await fetch('https://backendmern-ugqz.onrender.com/api/auth/sanctum', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
