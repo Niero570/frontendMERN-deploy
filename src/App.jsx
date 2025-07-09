@@ -28,7 +28,6 @@ function AppContent() {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/" />} />
-        <Route path="/sanctum" element={user ? <SanctumDashboard /> : <Navigate to="/" />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contacts />} />
         <Route path="/posts/:post_id" element={<Posts />} />
