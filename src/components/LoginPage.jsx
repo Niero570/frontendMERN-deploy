@@ -37,7 +37,7 @@ function LoginPage() {
             {/* Header Section */}
             <div style={headerStyles}>
               <div style={iconStyles}>🏛️</div>
-              <h1 style={titleStyles}>PET Sanctum</h1>
+              <h1 style={titleStyles}>PETS Sanctum</h1>
               <p style={subtitleStyles}>Primal Elemental Tiered Symbiosis</p>
             </div>
 
