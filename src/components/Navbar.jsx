@@ -15,27 +15,27 @@ function Navbar() {
       <div style={navContainerStyles}>
         {/* Logo/Brand */}
         <Link to="/" style={brandStyles}>
-          :classical_building: PET Sanctum
+          🏛️ PET Sanctum
         </Link>
         {/* Desktop Navigation */}
         <div style={desktopNavStyles}>
-          <Link to="/" style={{ ...navLinkStyles, ...(isActive('/') ? activeLinkStyles : {}) }}>:house: Home</Link>
-          <Link to="/about" style={{ ...navLinkStyles, ...(isActive('/about') ? activeLinkStyles : {}) }}>:book: About</Link>
-          <Link to="/contact" style={{ ...navLinkStyles, ...(isActive('/contact') ? activeLinkStyles : {}) }}>:mailbox_with_mail: Contact</Link>
-          <Link to="/collection" style={{ ...navLinkStyles, ...(isActive('/collection') ? activeLinkStyles : {}) }}>:crystal_ball: Collection</Link>
+          <Link to="/" style={{ ...navLinkStyles, ...(isActive('/') ? activeLinkStyles : {}) }}>🏠 Home</Link>
+          <Link to="/about" style={{ ...navLinkStyles, ...(isActive('/about') ? activeLinkStyles : {}) }}>📖 About</Link>
+          <Link to="/contact" style={{ ...navLinkStyles, ...(isActive('/contact') ? activeLinkStyles : {}) }}>📬 Contact</Link>
+          <Link to="/collection" style={{ ...navLinkStyles, ...(isActive('/collection') ? activeLinkStyles : {}) }}>🔮 Collection</Link>
           {user && (
             <Link to="/sanctum" style={{ ...navLinkStyles, ...(isActive('/sanctum') ? activeLinkStyles : {}) }}>
-              :classical_building: Sanctum
+              🏛️ Sanctum
             </Link>
           )}
           {user && (
             <Link to="/battle" style={{ ...battleLinkStyles, ...(isActive('/battle') ? activeLinkStyles : {}) }}>
-              :crossed_swords: Battle Arena
+              ⚔️ Battle Arena
             </Link>
           )}
           {user ? (
             <div style={userMenuStyles}>
-              <span style={userNameStyles}>:wave: {user.username}</span>
+              <span style={userNameStyles}>👋 {user.username}</span>
               <button
                 onClick={() => {
                   console.log('Logout clicked');
@@ -43,13 +43,13 @@ function Navbar() {
                 }}
                 style={logoutButtonStyles}
               >
-                :door: Logout
+                🚪 Logout
               </button>
             </div>
           ) : (
             <div style={authLinksStyles}>
-              <Link to="/login" style={authLinkStyles}>:classical_building: Login</Link>
-              <Link to="/signup" style={authLinkStyles}>:crystal_ball: Collect</Link>
+              <Link to="/login" style={authLinkStyles}>🏛️ Login</Link>
+              <Link to="/signup" style={authLinkStyles}>🔮 Collect</Link>
             </div>
           )}
         </div>
@@ -65,21 +65,21 @@ function Navbar() {
       {/* Mobile Navigation */}
       {isMenuOpen && (
         <div style={mobileNavStyles}>
-          <Link to="/" style={{ ...mobileNavLinkStyles, ...(isActive('/') ? activeMobileLinkStyles : {}) }} onClick={() => setIsMenuOpen(false)}>:house: Home</Link>
-          <Link to="/about" style={{ ...mobileNavLinkStyles, ...(isActive('/about') ? activeMobileLinkStyles : {}) }} onClick={() => setIsMenuOpen(false)}>:book: About</Link>
-          <Link to="/contact" style={{ ...mobileNavLinkStyles, ...(isActive('/contact') ? activeMobileLinkStyles : {}) }} onClick={() => setIsMenuOpen(false)}>:mailbox_with_mail: Contact</Link>
-          <Link to="/collection" style={{ ...mobileNavLinkStyles, ...(isActive('/collection') ? activeMobileLinkStyles : {}) }} onClick={() => setIsMenuOpen(false)}>:crystal_ball: Collection</Link>
+          <Link to="/" style={{ ...mobileNavLinkStyles, ...(isActive('/') ? activeMobileLinkStyles : {}) }} onClick={() => setIsMenuOpen(false)}>🏠 Home</Link>
+          <Link to="/about" style={{ ...mobileNavLinkStyles, ...(isActive('/about') ? activeMobileLinkStyles : {}) }} onClick={() => setIsMenuOpen(false)}>📖 About</Link>
+          <Link to="/contact" style={{ ...mobileNavLinkStyles, ...(isActive('/contact') ? activeMobileLinkStyles : {}) }} onClick={() => setIsMenuOpen(false)}>📬 Contact</Link>
+          <Link to="/collection" style={{ ...mobileNavLinkStyles, ...(isActive('/collection') ? activeMobileLinkStyles : {}) }} onClick={() => setIsMenuOpen(false)}>🔮 Collection</Link>
           {user && (
-            <Link to="/sanctum" style={{ ...mobileNavLinkStyles, ...(isActive('/sanctum') ? activeMobileLinkStyles : {}) }} onClick={() => setIsMenuOpen(false)}>:classical_building: Sanctum</Link>
+            <Link to="/sanctum" style={{ ...mobileNavLinkStyles, ...(isActive('/sanctum') ? activeMobileLinkStyles : {}) }} onClick={() => setIsMenuOpen(false)}>🏛️ Sanctum</Link>
           )}
           {user && (
-            <Link to="/battle" style={{ ...mobileBattleLinkStyles, ...(isActive('/battle') ? activeMobileLinkStyles : {}) }} onClick={() => setIsMenuOpen(false)}>:crossed_swords: Battle Arena</Link>
+            <Link to="/battle" style={{ ...mobileBattleLinkStyles, ...(isActive('/battle') ? activeMobileLinkStyles : {}) }} onClick={() => setIsMenuOpen(false)}>⚔️ Battle Arena</Link>
           )}
           {user && (
             <div style={mobileUserMenuStyles}>
-              <span style={userNameStyles}>:wave: {user.username}</span>
+              <span style={userNameStyles}>👋 {user.username}</span>
               <button onClick={logout} style={mobileLogoutButtonStyles}>
-                :door: Logout
+                🚪 Logout
               </button>
             </div>
           )}
