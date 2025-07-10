@@ -26,7 +26,7 @@ function Navbar() {
           <Link to="/collection" style={navLinkStyles}>🔮 Collection</Link>
           {user && <Link to="/sanctum" style={navLinkStyles}>🏛️ Sanctum</Link>}
           {user && <Link to="/battle" style={battleLinkStyles}>⚔️ Battle Arena</Link>}
-          {user && <Link to="/dashboard" style={navLinkStyles}>👤 Dashboard</Link>}
+          {/* {user && <Link to="/dashboard" style={navLinkStyles}>👤 Dashboard</Link>} */}
           {user ? (
             <div style={userMenuStyles}>
               <span style={userNameStyles}>👋 {user.username}</span>
@@ -83,11 +83,11 @@ function Navbar() {
               ⚔️ Battle Arena
             </Link>
           )}
-          {user && (
+          {/* {user && (
             <Link to="/dashboard" style={mobileNavLinkStyles} onClick={() => setIsMenuOpen(false)}>
               👤 Dashboard
             </Link>
-          )}
+          )} */}
           {user && (
             <div style={mobileUserMenuStyles}>
               <span style={userNameStyles}>👋 {user.username}</span>

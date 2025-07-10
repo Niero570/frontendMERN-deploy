@@ -21,7 +21,7 @@ const Contacts = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically send the form data to your backend
+    // Here you send the form data to your backend
     console.log('Contact form submitted:', formData);
     setSubmitted(true);
     
