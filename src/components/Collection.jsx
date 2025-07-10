@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../content/authContent';
 import Footer from './Footer';
 
-function Gallery() {
+function Collection() {
   const { user, token } = useAuth();
   
   // Helper function for image mapping
@@ -747,4 +747,4 @@ if (typeof window !== 'undefined') {
   document.head.appendChild(style);
 }
 
-export default Gallery;
+export default Collection;

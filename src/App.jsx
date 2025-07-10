@@ -12,6 +12,7 @@ import Contacts from './components/Contacts';
 import Posts from './components/Posts';
 import BattleArenaEnhanced from './components/BattleArenaEnhanced';
 import Collection from './components/Collection';
+import SanctumDashboard from './components/SanctumDashboard';
 import SignupPage from './pages/signup';
 
 function AppContent() {
@@ -34,6 +35,7 @@ function AppContent() {
         <Route path="/posts/:post_id" element={<Posts />} />
         <Route path="/battle" element={user ? <BattleArenaEnhanced /> : <Navigate to="/" />} />
         <Route path="/collection" element={<Collection />} />
+        <Route path="/sanctum" element={user ? <SanctumDashboard /> : <Navigate to="/" />} />
         <Route path="/signup" element={<SignupPage />} />
 
       </Routes>
