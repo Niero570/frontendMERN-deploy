@@ -10,6 +10,7 @@ function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     setLoading(true);
@@ -65,15 +66,25 @@ function LoginPage() {
 
               <div style={inputGroupStyles}>
                 <label style={labelStyles}>🔒 Password</label>
-                <input 
-                  type="password" 
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-                  style={inputStyles}
-                  disabled={loading}
-                />
+                <div style={passwordContainerStyles}>
+                  <input 
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+                    style={passwordInputStyles}
+                    disabled={loading}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={toggleButtonStyles}
+                    disabled={loading}
+                  >
+                    {showPassword ? '😌' : '👁️'}
+                  </button>
+                </div>
               </div>
 
               <button 
@@ -252,6 +263,41 @@ const inputStyles = {
   transition: 'all 0.3s ease',
   boxSizing: 'border-box',
   fontFamily: 'inherit'
+};
+
+const passwordContainerStyles = {
+  position: 'relative',
+  display: 'flex',
+  alignItems: 'center'
+};
+
+const passwordInputStyles = {
+  width: '100%',
+  padding: '18px 50px 18px 20px',
+  fontSize: '1.1rem',
+  border: '2px solid #e9ecef',
+  borderRadius: '15px',
+  background: '#fff',
+  transition: 'all 0.3s ease',
+  boxSizing: 'border-box',
+  fontFamily: 'inherit'
+};
+
+const toggleButtonStyles = {
+  position: 'absolute',
+  right: '15px',
+  background: 'none',
+  border: 'none',
+  fontSize: '1.2rem',
+  cursor: 'pointer',
+  padding: '5px',
+  borderRadius: '50%',
+  transition: 'all 0.3s ease',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '30px',
+  height: '30px'
 };
 
 const buttonStyles = {
