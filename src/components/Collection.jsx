@@ -9,27 +9,27 @@ function Collection() {
   const getPetImage = (creature) => {
     // Map creature names to actual image files
     const imageMap = {
-      'Flame Warlord': './public/images/disChimp.png',
-      'Storm Bear': './public/images/disPolar.png', 
-      'Forest Chimp': './public/images/proChimp.png',
-      'Arctic Bear': './public/images/proPolar.jpeg',
-      'Phoenix Lord': './public/images/disEagle.jpeg',
-      'Golden Tiger': './public/images/proTiger.jpeg',
-      'Inferno Tiger': './public/images/disTiger.jpeg',
-      'Celestial Flamingo': './public/images/proPink.png',
-      'Noble Steed': './public/images/proArabian.jpeg',
-      'Gentle Panda': './public/images/proPanda.jpeg',
-      'Royal Lion': './public/images/proLion.jpeg',
-      'Flame Lion': './public/images/disLion.jpeg',
-      'Shadow Wolf': './public/images/disWolf.jpeg',
-      'Wolf Pup': './public/images/proWolf.jpeg',
-      'Golden Eagle': './public/images/proEagle.jpeg',
-      'Girragon': './public/images/disGirragon.jpeg',
-      'Savanna Giraffe': './public/images/proGiraffe.jpeg',
-      'Phoenix Flamingo': './public/images/disPink.jpeg',
-      'Arabian Unicorn': './public/images/proArabian.jpeg',
-      'Cosmic Unicorn': './public/images/disArabian.jpeg',
-      'Fire Panda': './public/images/disPanda.jpeg'
+      'Flame Warlord': '/images/disChimp.png',
+      'Storm Bear': '/images/disPolar.png', 
+      'Forest Chimp': '/images/proChimp.png',
+      'Arctic Bear': '/images/proPolar.jpeg',
+      'Phoenix Lord': '/images/disEagle.jpeg',
+      'Golden Tiger': '/images/proTiger.jpeg',
+      'Inferno Tiger': '/images/disTiger.jpeg',
+      'Celestial Flamingo': '/images/proPink.png',
+      'Noble Steed': '/images/proArabian.jpeg',
+      'Gentle Panda': '/images/proPanda.jpeg',
+      'Royal Lion': '/images/proLion.jpeg',
+      'Flame Lion': '/images/disLion.jpeg',
+      'Shadow Wolf': '/images/disWolf.jpeg',
+      'Wolf Pup': '/images/proWolf.jpeg',
+      'Golden Eagle': '/images/proEagle.jpeg',
+      'Girragon': '/images/disGirragon.jpeg',
+      'Savanna Giraffe': '/images/proGiraffe.jpeg',
+      'Phoenix Flamingo': '/images/disPink.jpeg',
+      'Arabian Unicorn': '/images/proArabian.jpeg',
+      'Cosmic Unicorn': '/images/disArabian.jpeg',
+      'Fire Panda': '/images/disPanda.jpeg'
     };
     
     return imageMap[creature.identity?.name] || creature.meta?.image || '/images/placeholder.png';
