@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../content/authContent';
 import styles from './Dashboard.module.css';
 
 export default function Dashboard() {
   const { user, token } = useAuth();
+  const navigate = useNavigate();
   const [userPets, setUserPets] = useState([]);
   const [sanctumInfo, setSanctumInfo] = useState(null);
   const [loading, setLoading] = useState(true);

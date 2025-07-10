@@ -33,7 +33,7 @@ function Footer() {
           <h4 style={sectionTitleStyles}>Connect</h4>
           <div style={socialLinksStyles}>
             <a 
-              href="https://linkedin.com/in/your-profile" 
+              href="https://www.linkedin.com/in/jamel-swanson-580ba96b/" 
               target="_blank" 
               rel="noopener noreferrer"
               style={socialLinkStyles}
@@ -43,7 +43,7 @@ function Footer() {
               LinkedIn
             </a>
             <a 
-              href="https://github.com/your-username" 
+              href="https://github.com/Niero570" 
               target="_blank" 
               rel="noopener noreferrer"
               style={socialLinkStyles}
@@ -53,7 +53,7 @@ function Footer() {
               GitHub
             </a>
             <a 
-              href="mailto:your.email@example.com"
+              href="mailto:niero570@gmail.com"
               style={socialLinkStyles}
               title="Email Contact"
             >
@@ -61,14 +61,12 @@ function Footer() {
               Email
             </a>
             <a 
-              href="https://your-portfolio.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
+              href="mailto:bushidocoder0@gmail.com"
               style={socialLinkStyles}
-              title="Portfolio Website"
+              title="Professional Contact"
             >
-              <span style={socialIconStyles}>🌐</span>
-              Portfolio
+              <span style={socialIconStyles}>🥷</span>
+              BushidoCoder
             </a>
           </div>
         </div>
