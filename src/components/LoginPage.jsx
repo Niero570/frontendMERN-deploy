@@ -82,9 +82,9 @@ function LoginPage() {
                     style={toggleButtonStyles}
                     disabled={loading}
                   >
-                    {showPassword ? '😌' : '👁️'}
+                    {showPassword ? '👁️' : '😌'}
                   </button>
-                </div>
+                </div>   
               </div>
 
               <button 
