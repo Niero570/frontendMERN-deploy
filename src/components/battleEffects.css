@@ -1,0 +1,339 @@
+/* 
+🎨 EPIC BATTLE EFFECTS CSS
+Lightweight keyframe animations for idle effects and continuous glows
+Optimized for mobile performance with GPU acceleration
+*/
+
+/* ⚡ IDLE GLOW EFFECTS - Continuous, subtle animations */
+
+.idle-glow {
+  animation: idleGlow 3s ease-in-out infinite alternate;
+  transform: translateZ(0); /* Force GPU acceleration */
+}
+
+@keyframes idleGlow {
+  0% {
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    filter: brightness(1);
+  }
+  100% {
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+    filter: brightness(1.05);
+  }
+}
+
+/* 🔥 ELEMENTAL IDLE GLOWS */
+
+.fire-idle-glow {
+  animation: fireIdleGlow 2.5s ease-in-out infinite alternate;
+  transform: translateZ(0);
+}
+
+@keyframes fireIdleGlow {
+  0% {
+    box-shadow: 0 0 12px rgba(255, 107, 107, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(255, 107, 107, 0.7);
+  }
+}
+
+.water-idle-glow {
+  animation: waterIdleGlow 3.5s ease-in-out infinite alternate;
+  transform: translateZ(0);
+}
+
+@keyframes waterIdleGlow {
+  0% {
+    box-shadow: 0 0 12px rgba(78, 205, 196, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(78, 205, 196, 0.7);
+  }
+}
+
+.earth-idle-glow {
+  animation: earthIdleGlow 4s ease-in-out infinite alternate;
+  transform: translateZ(0);
+}
+
+@keyframes earthIdleGlow {
+  0% {
+    box-shadow: 0 0 12px rgba(149, 225, 211, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(149, 225, 211, 0.7);
+  }
+}
+
+.air-idle-glow {
+  animation: airIdleGlow 2.8s ease-in-out infinite alternate;
+  transform: translateZ(0);
+}
+
+@keyframes airIdleGlow {
+  0% {
+    box-shadow: 0 0 12px rgba(168, 230, 207, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(168, 230, 207, 0.7);
+  }
+}
+
+/* 💓 CRITICAL HEALTH PULSE */
+
+.critical-health-pulse {
+  animation: criticalHealthPulse 1s ease-in-out infinite;
+  transform: translateZ(0);
+}
+
+@keyframes criticalHealthPulse {
+  0%, 100% {
+    background: linear-gradient(90deg, #ff6b6b, #ee5a52);
+    box-shadow: 0 0 10px rgba(255, 107, 107, 0.6);
+  }
+  50% {
+    background: linear-gradient(90deg, #ff1744, #d50000);
+    box-shadow: 0 0 20px rgba(255, 23, 68, 0.8);
+  }
+}
+
+/* ⚡ CHARGING AURA - For special attacks */
+
+.charging-aura {
+  animation: chargingAura 1.2s ease-in-out infinite;
+  transform: translateZ(0);
+}
+
+@keyframes chargingAura {
+  0%, 100% {
+    box-shadow: 
+      0 0 20px rgba(255, 215, 0, 0.6),
+      inset 0 0 20px rgba(255, 215, 0, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 
+      0 0 40px rgba(255, 215, 0, 0.9),
+      inset 0 0 30px rgba(255, 215, 0, 0.4);
+    transform: scale(1.02);
+  }
+}
+
+/* 🌟 SELECTION GLOW - For creature selection */
+
+.selection-glow {
+  animation: selectionGlow 2s ease-in-out infinite alternate;
+  transform: translateZ(0);
+  border: 3px solid transparent;
+  background: linear-gradient(145deg, #1a1a2e, #16213e) padding-box,
+              linear-gradient(45deg, #4ecdc4, #44a08d) border-box;
+}
+
+@keyframes selectionGlow {
+  0% {
+    box-shadow: 0 0 15px rgba(78, 205, 196, 0.5);
+    filter: brightness(1);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(78, 205, 196, 0.8);
+    filter: brightness(1.1);
+  }
+}
+
+/* 🏆 VICTORY GLOW - For winners */
+
+.victory-glow {
+  animation: victoryGlow 1.5s ease-in-out infinite alternate;
+  transform: translateZ(0);
+}
+
+@keyframes victoryGlow {
+  0% {
+    box-shadow: 
+      0 0 30px rgba(255, 215, 0, 0.7),
+      0 0 60px rgba(255, 215, 0, 0.4);
+    filter: brightness(1.1) saturate(1.1);
+  }
+  100% {
+    box-shadow: 
+      0 0 50px rgba(255, 215, 0, 0.9),
+      0 0 100px rgba(255, 215, 0, 0.6);
+    filter: brightness(1.3) saturate(1.3);
+  }
+}
+
+/* 🎯 TARGETING EFFECT - Shows which pet will attack next */
+
+.targeting-indicator {
+  position: relative;
+}
+
+.targeting-indicator::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border: 2px solid #ffd700;
+  border-radius: 25px;
+  animation: targetingPulse 1s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
+@keyframes targetingPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* ⚡ BATTLE READY STATE */
+
+.battle-ready {
+  animation: battleReady 2s ease-in-out infinite alternate;
+  transform: translateZ(0);
+}
+
+@keyframes battleReady {
+  0% {
+    box-shadow: 0 0 20px rgba(255, 107, 107, 0.4);
+    filter: brightness(1);
+  }
+  100% {
+    box-shadow: 0 0 35px rgba(255, 107, 107, 0.7);
+    filter: brightness(1.08);
+  }
+}
+
+/* 🎨 FLOATING PARTICLES BACKGROUND */
+
+.battle-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.battle-particles::before {
+  content: '✨';
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  font-size: 1rem;
+  opacity: 0.6;
+  animation: floatParticle1 8s ease-in-out infinite;
+}
+
+.battle-particles::after {
+  content: '⭐';
+  position: absolute;
+  top: 60%;
+  right: 15%;
+  font-size: 0.8rem;
+  opacity: 0.5;
+  animation: floatParticle2 10s ease-in-out infinite;
+}
+
+@keyframes floatParticle1 {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+    opacity: 0.3;
+  }
+}
+
+@keyframes floatParticle2 {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-15px) rotate(-180deg);
+    opacity: 0.2;
+  }
+}
+
+/* 📱 MOBILE OPTIMIZATIONS */
+
+@media (max-width: 768px) {
+  /* Reduce animation intensity on mobile for better performance */
+  .idle-glow,
+  .fire-idle-glow,
+  .water-idle-glow,
+  .earth-idle-glow,
+  .air-idle-glow {
+    animation-duration: 4s; /* Slower animations */
+  }
+  
+  .critical-health-pulse {
+    animation-duration: 1.5s;
+  }
+  
+  .charging-aura {
+    animation-duration: 1.5s;
+  }
+  
+  /* Disable particles on small screens */
+  .battle-particles::before,
+  .battle-particles::after {
+    display: none;
+  }
+}
+
+/* 🎪 UTILITY CLASSES */
+
+.no-animation {
+  animation: none !important;
+  transition: none !important;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.battle-container {
+  position: relative;
+  transform: translateZ(0); /* Force GPU layer */
+}
+
+/* 🔄 TURN INDICATOR */
+
+.active-turn {
+  position: relative;
+}
+
+.active-turn::after {
+  content: '⚡';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 1.5rem;
+  animation: turnIndicator 1s ease-in-out infinite;
+  z-index: 20;
+}
+
+@keyframes turnIndicator {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.2) rotate(10deg);
+    opacity: 1;
+  }
+}

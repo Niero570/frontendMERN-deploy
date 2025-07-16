@@ -10,12 +10,8 @@ export default defineConfig({
         target: 'http://localhost:5000',
         changeOrigin: true,
         secure: false,
-      },
-      '/images': {
-        target: 'http://localhost:5000',
-        changeOrigin: true,
-        secure: false,
       }
+      // Removed /images proxy - let Vite serve images from public folder
     }
   }
 })

@@ -1,11 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../content/authContent';
 import Footer from './Footer';
-// Animation will be handled by CSS
+import { epicBattleAnimations } from './battleAnimations';
+import './battleEffects.css';
+import DevCheatPanel, { useDevCheats } from './DevCheatPanel';
+// 🎬 EPIC BATTLE ARENA - Enhanced with advanced animations
+// Uses Anime.js + GSAP for high-impact visual effects while keeping pets static
 const BattleArenaEnhanced = () => {
+  const { addCoins, unlockAllPets, resetBattle: devResetBattle, forceEnvironment, setCreatureTier } = useDevCheats();
+
   const { token } = useAuth();
   
-  // State management
+  // 🎮 Core State Management
   const [selectedCreatures, setSelectedCreatures] = useState([]);
   const [creature1, setCreature1] = useState(null);
   const [creature2, setCreature2] = useState(null);
@@ -17,8 +23,22 @@ const BattleArenaEnhanced = () => {
   const [creatures, setCreatures] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  //test lin
+  
+  // 🎬 Animation State Management - NEW!
+  const [attackPhase, setAttackPhase] = useState('idle'); // 'idle', 'charging', 'attacking', 'impact', 'recovery'
+  const [currentAttacker, setCurrentAttacker] = useState(null); // 1 or 2
+  const [damageAmount, setDamageAmount] = useState(0);
+  const [damageType, setDamageType] = useState('normal'); // 'normal', 'critical', 'special', 'heal', 'advantage'
+  const [elementType, setElementType] = useState('normal'); // Element type for themed effects
+  const [isSpecialAttack, setIsSpecialAttack] = useState(false);
+  
+  // Refs for DOM elements and animation control
   const battleInterval = useRef(null);
+  const creature1Ref = useRef(null);
+  const creature2Ref = useRef(null);
+  const healthBar1Ref = useRef(null);
+  const healthBar2Ref = useRef(null);
+  const currentAnimations = useRef([]); // Track running animations for cleanup
 
   // Game constants
   const typeAdvantages = {
@@ -118,6 +138,9 @@ const BattleArenaEnhanced = () => {
 
   // Helper function for image mapping
   const getPetImage = (creature) => {
+    // 🐛 DEBUG: Log creature name to help debug image loading
+    console.log('🖼️ UPDATED - Getting image for creature:', creature.name);
+    
     const imageMap = {
       'Flame Warlord': '/images/disChimp.png',
       'Storm Bear': '/images/disPolar.png', 
@@ -142,7 +165,9 @@ const BattleArenaEnhanced = () => {
       'Fire Panda': '/images/disPanda.jpeg'
     };
     
-    return imageMap[creature.name] || '/images/placeholder.png';
+    const imagePath = imageMap[creature.name] || '/images/placeholder.png';
+    console.log('🎯 Image path for', creature.name, ':', imagePath);
+    return imagePath;
   };
 
   const addLogEntry = (text, type = 'damage') => {
@@ -157,74 +182,17 @@ const BattleArenaEnhanced = () => {
     }, 50);
   };
 
-  const createDamageNumber = (element, damage, type = 'normal') => {
+  // 💥 EPIC DAMAGE NUMBERS - Now using animation system
+  const createEpicDamageNumber = (element, damage, type = 'normal') => {
     if (!element) return;
     
-    const rect = element.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
-    
-    const damageDiv = document.createElement('div');
-    damageDiv.className = `damage-number ${type}`;
-    damageDiv.textContent = damage;
-    
-    // Enhanced color scheme
-    const colors = {
-      critical: '#ff1744',
-      heal: '#00e676', 
-      special: '#ffd700',
-      advantage: '#4caf50',
-      normal: '#f44336'
-    };
-    
-    damageDiv.style.cssText = `
-      position: fixed;
-      left: ${x}px;
-      top: ${y}px;
-      font-size: 1.5rem;
-      font-weight: bold;
-      pointer-events: none;
-      z-index: 100;
-      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
-      color: ${colors[type] || colors.normal};
-      opacity: 0;
-      transform: scale(0.5);
-    `;
-    
-    document.body.appendChild(damageDiv);
-    
-    // CSS animation for damage number
-    setTimeout(() => {
-      damageDiv.style.transform = 'translateY(-50px) scale(1.2)';
-      damageDiv.style.opacity = '1';
-    }, 10);
-    
-    setTimeout(() => {
-      damageDiv.style.transform = 'translateY(-100px) scale(0.8)';
-      damageDiv.style.opacity = '0';
-    }, 1000);
-    
-    setTimeout(() => {
-      document.body.removeChild(damageDiv);
-    }, 1500);
+    // Use our epic animation system instead of basic CSS
+    return epicBattleAnimations.epicFloatingDamage(element, damage, type);
   };
 
-  const screenFlash = () => {
-    const flash = document.createElement('div');
-    flash.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4);
-      opacity: 0;
-      pointer-events: none;
-      z-index: 200;
-    `;
-    document.body.appendChild(flash);
-    
-    // Enhanced screen flash with anime.js
+  // 🎆 EPIC SCREEN FLASH - Now powered by GSAP
+  const createEpicScreenFlash = (color, intensity = 1) => {
+    return epicBattleAnimations.epicScreenFlash(color, intensity);
   };
 
   const calculateDamage = (attacker, defender, isSpecial) => {
@@ -325,139 +293,149 @@ const BattleArenaEnhanced = () => {
     }
   };
 
-  const performAttack = (attacker, defender, attackerNum, defenderNum, updateCreature) => {
-    console.log('🎯 performAttack called:', attacker.name, 'vs', defender.name);
-    const attackerElement = document.getElementById(`creature${attackerNum}Card`);
-    const defenderElement = document.getElementById(`creature${defenderNum}Card`);
+  // ⚔️ EPIC ATTACK PERFORMANCE - Completely rewritten with epic animations!
+  const performEpicAttack = (attacker, defender, attackerNum, defenderNum, updateCreature) => {
+    console.log('🎆 EPIC ATTACK INITIATED:', attacker.name, 'vs', defender.name);
     
-    console.log('🎯 DOM elements found:', {
-      attackerElement: !!attackerElement,
-      defenderElement: !!defenderElement
-    });
-
-    // Fallback if DOM elements don't exist yet
+    // Get DOM elements with refs for better performance
+    const attackerElement = attackerNum === 1 ? creature1Ref.current : creature2Ref.current;
+    const defenderElement = defenderNum === 1 ? creature1Ref.current : creature2Ref.current;
+    const defenderHealthBar = defenderNum === 1 ? healthBar1Ref.current : healthBar2Ref.current;
+    
+    // Fallback check
     if (!attackerElement || !defenderElement) {
-      console.log('🔧 DOM elements missing, performing simplified attack');
-      const isSpecial = Math.random() < 0.3;
-      const damageInfo = calculateDamage(attacker, defender, isSpecial);
-      const damage = damageInfo.damage;
-      const newHp = Math.max(0, defender.currentHp - damage);
-      
-      addLogEntry(`${attacker.name} is preparing to attack...`, 'special');
-      setTimeout(() => {
-        const attackType = isSpecial ? attacker.special : 'attacks';
-        addLogEntry(`${attacker.name} ${isSpecial ? 'uses ' + attackType : attackType} for ${damage} damage!`, isSpecial ? 'special' : 'damage');
-        updateCreature(defenderNum, { currentHp: newHp });
-        
-        // Check for victory
-        if (newHp <= 0) {
-          endBattle(attacker);
-        } else {
-          // Reset battle turn lock
-          setTimeout(() => setBattleTurnActive(false), 500);
-        }
-      }, 1000);
+      console.log('🚨 DOM elements missing, using fallback');
+      executeSimplifiedAttack(attacker, defender, attackerNum, defenderNum, updateCreature);
       return;
     }
 
-    // Determine if this is a special attack
+    // 🎯 Determine attack type and calculate damage
     const isSpecial = Math.random() < 0.3;
+    const damageInfo = calculateDamage(attacker, defender, isSpecial);
+    const damage = damageInfo.damage;
+    const newHp = Math.max(0, defender.currentHp - damage);
+    const newHealthPercent = (newHp / defender.hp) * 100;
     
-    // Wind-up animation with CSS
-    addLogEntry(`${attacker.name} is preparing to attack...`, 'special');
+    // 🎬 Set animation state
+    setAttackPhase('charging');
+    setCurrentAttacker(attackerNum);
+    setDamageAmount(damage);
+    setIsSpecialAttack(isSpecial);
+    setElementType(attacker.type || 'normal');
     
-    const attackElement = document.getElementById(`creature${attackerNum}Card`);
-    if (attackElement) {
-      // Attack animation
-      attackElement.style.transform = 'scale(1.1)';
-      attackElement.style.transition = 'transform 0.3s ease';
+    // Determine damage type for visual effects
+    let dType = 'normal';
+    if (damageInfo.critical) dType = 'critical';
+    else if (isSpecial) dType = 'special';
+    else if (damageInfo.advantage) dType = 'advantage';
+    setDamageType(dType);
+    
+    // 🎆 EPIC ATTACK SEQUENCE STARTS HERE!
+    addLogEntry(`${attacker.name} is charging up an ${isSpecial ? 'EPIC SPECIAL' : 'attack'}...`, isSpecial ? 'special' : 'damage');
+    
+    // Add targeting indicator
+    defenderElement.classList.add('targeting-indicator');
+    if (isSpecial) attackerElement.classList.add('charging-aura');
+    
+    // 🚀 Execute the epic combo sequence
+    const epicSequence = epicBattleAnimations.comboAttackSequence(
+      attackerElement,
+      defenderElement,
+      {
+        isSpecial,
+        elementType: attacker.type || 'normal',
+        damage: `-${damage}`,
+        damageType: dType
+      },
+      defenderHealthBar,
+      newHealthPercent
+    );
+    
+    // Track animation for cleanup
+    currentAnimations.current.push(epicSequence);
+    
+    // 💫 Handle sequence completion
+    epicSequence.eventCallback('onComplete', () => {
+      // Clean up classes
+      defenderElement.classList.remove('targeting-indicator');
+      attackerElement.classList.remove('charging-aura');
       
-      setTimeout(() => {
-        attackElement.style.transform = 'scale(1)';
-        const defenderElement = document.getElementById(`creature${defenderNum}Card`);
-        executeAttackSequence(attacker, defender, attackerNum, defenderNum, updateCreature, attackElement, defenderElement, isSpecial);
-      }, 300);
-    } else {
-      const defenderElement = document.getElementById(`creature${defenderNum}Card`);
-      executeAttackSequence(attacker, defender, attackerNum, defenderNum, updateCreature, attackElement, defenderElement, isSpecial);
-    }
+      // Update creature HP
+      updateCreature(defenderNum, { currentHp: newHp });
+      
+      // 🎆 Add epic battle log
+      let logText = `${attacker.name} `;
+      if (isSpecial) {
+        logText += `unleashes ${attacker.special} for `;
+      } else {
+        logText += `attacks for `;
+      }
+      logText += `${damage} EPIC damage`;
+      
+      if (damageInfo.critical) logText += ' (CRITICAL HIT!)';
+      if (damageInfo.advantage) logText += ' (TYPE ADVANTAGE!)';
+      if (isSpecial && attacker.tier === 'Dissonant') logText += ' (DISSONANT POWER!)';
+      
+      addLogEntry(logText, damageInfo.critical ? 'critical' : (isSpecial ? 'special' : 'damage'));
+      
+      // 🎅 Handle healing if attacker has heal ability
+      if (attacker.heal > 0 && attacker.currentHp < attacker.hp) {
+        setTimeout(() => {
+          const healAmount = Math.floor(attacker.heal * (0.8 + Math.random() * 0.4));
+          const newAttackerHp = Math.min(attacker.hp, attacker.currentHp + healAmount);
+          updateCreature(attackerNum, { currentHp: newAttackerHp });
+          
+          // Epic healing animation
+          createEpicDamageNumber(attackerElement, `+${healAmount}`, 'heal');
+          addLogEntry(`${attacker.name} regenerates ${healAmount} HP!`, 'heal');
+          
+          // Update attacker's health bar
+          const attackerHealthBar = attackerNum === 1 ? healthBar1Ref.current : healthBar2Ref.current;
+          if (attackerHealthBar) {
+            epicBattleAnimations.animateHealthBar(
+              attackerHealthBar,
+              (newAttackerHp / attacker.hp) * 100,
+              0.8
+            );
+          }
+        }, 500);
+      }
+      
+      // 🏆 Check for victory
+      if (newHp <= 0) {
+        setTimeout(() => {
+          epicBattleAnimations.epicVictoryCelebration(attackerElement);
+          endBattle(attacker);
+        }, 800);
+        return;
+      }
+      
+      // Reset animation state and continue battle
+      setAttackPhase('idle');
+      setCurrentAttacker(null);
+      setTimeout(() => setBattleTurnActive(false), 1000);
+    });
   };
 
-  const executeAttackSequence = (attacker, defender, attackerNum, defenderNum, updateCreature, attackerElement, defenderElement, isSpecial) => {
-    console.log('⚔️ executeAttackSequence started:', attacker.name, 'attacking', defender.name);
+  // 🚨 SIMPLIFIED ATTACK FALLBACK - For when DOM elements aren't ready
+  const executeSimplifiedAttack = (attacker, defender, attackerNum, defenderNum, updateCreature) => {
+    const isSpecial = Math.random() < 0.3;
     const damageInfo = calculateDamage(attacker, defender, isSpecial);
-    let damage = damageInfo.damage;
-    const isCritical = damageInfo.critical;
-    const hasAdvantage = damageInfo.advantage;
-    
-    // Update defender health
+    const damage = damageInfo.damage;
     const newHp = Math.max(0, defender.currentHp - damage);
-    updateCreature(defenderNum, { currentHp: newHp });
     
-    // Damage animation with CSS
-    if (defenderElement) {
-      defenderElement.style.transform = 'translateX(10px)';
-      defenderElement.style.transition = 'transform 0.2s ease';
-      defenderElement.style.filter = 'brightness(1.5)';
-      
-      setTimeout(() => {
-        defenderElement.style.transform = 'translateX(0)';
-        defenderElement.style.filter = 'brightness(1)';
-      }, 200);
-    }
-    
-    // Create damage number
-    let damageType = 'normal';
-    if (isCritical) damageType = 'critical';
-    else if (isSpecial) damageType = 'special';
-    if (hasAdvantage) damageType = 'advantage';
-    
-    createDamageNumber(defenderElement, `-${damage}`, damageType);
-    
-    // Screen flash for Dissonant ultimate attacks
-    if (attacker.tier === 'Dissonant' && isSpecial) {
-      screenFlash();
-    }
-    
-    // Log entry
-    let logText = `${attacker.name} `;
-    if (isSpecial) {
-      logText += `uses ${attacker.special} for `;
-    } else {
-      logText += `attacks for `;
-    }
-    logText += `${damage} damage`;
-    
-    if (isCritical) logText += ' (CRITICAL HIT!)';
-    if (hasAdvantage) logText += ' (TYPE ADVANTAGE!)';
-    
-    addLogEntry(logText, isCritical ? 'critical' : (isSpecial ? 'special' : 'damage'));
-    
-    // Healing with anime.js
-    if (attacker.heal > 0 && attacker.currentHp < attacker.hp) {
-      const healAmount = Math.floor(attacker.heal * (0.8 + Math.random() * 0.4));
-      const newAttackerHp = Math.min(attacker.hp, attacker.currentHp + healAmount);
-      updateCreature(attackerNum, { currentHp: newAttackerHp });
-      
-      setTimeout(() => {
-        // Healing glow animation
-        
-        createDamageNumber(attackerElement, `+${healAmount}`, 'heal');
-        addLogEntry(`${attacker.name} heals for ${healAmount}`, 'heal');
-      }, 300);
-    }
-    
-    // Check for victory
-    if (newHp <= 0) {
-      endBattle(attacker);
-      return;
-    }
-    
-    // Reset animations and battle turn lock
+    addLogEntry(`${attacker.name} is preparing to attack...`, 'special');
     setTimeout(() => {
-      console.log('🔓 Unlocking battle turn');
-      setBattleTurnActive(false);
-    }, 500);
+      const attackType = isSpecial ? attacker.special : 'attacks';
+      addLogEntry(`${attacker.name} ${isSpecial ? 'uses ' + attackType : attackType} for ${damage} damage!`, isSpecial ? 'special' : 'damage');
+      updateCreature(defenderNum, { currentHp: newHp });
+      
+      if (newHp <= 0) {
+        endBattle(attacker);
+      } else {
+        setTimeout(() => setBattleTurnActive(false), 500);
+      }
+    }, 1000);
   };
 
   const executeBattleTurn = () => {
@@ -506,7 +484,7 @@ const BattleArenaEnhanced = () => {
       defenderNum = 1;
     }
 
-    performAttack(attacker, defender, attackerNum, defenderNum, updateCreature);
+    performEpicAttack(attacker, defender, attackerNum, defenderNum, updateCreature);
   };
 
   const autoBattle = () => {
@@ -515,51 +493,78 @@ const BattleArenaEnhanced = () => {
     addLogEntry('Auto-battle initiated!', 'special');
   };
 
+  // 🏆 EPIC VICTORY SEQUENCE
   const endBattle = (winner) => {
     clearInterval(battleInterval.current);
     setBattleActive(false);
     setBattleTurnActive(false);
     
-    // Enhanced victory animation with anime.js
-    const winnerId = winner.id === 1 ? 'creature1Card' : 'creature2Card';
-    const winnerElement = document.getElementById(winnerId);
+    // Clean up any running animations
+    currentAnimations.current.forEach(animation => {
+      if (animation && animation.kill) animation.kill();
+    });
+    currentAnimations.current = [];
+    
+    // Get winner element
+    const winnerElement = winner.id === 1 ? creature1Ref.current : creature2Ref.current;
     
     if (winnerElement) {
-      // Victory celebration animation
-      winnerElement.style.transform = 'scale(1.2)';
-      winnerElement.style.boxShadow = '0 0 30px rgba(255, 215, 0, 0.8)';
-      winnerElement.style.transition = 'all 0.5s ease';
+      // Add victory glow class for continuous effect
+      winnerElement.classList.add('victory-glow');
       
-      // Victory screen flash
-      const victoryFlash = document.createElement('div');
-      victoryFlash.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0.1) 50%, transparent 100%);
-        opacity: 0;
-        pointer-events: none;
-        z-index: 300;
-      `;
-      document.body.appendChild(victoryFlash);
+      // Epic victory celebration
+      epicBattleAnimations.epicVictoryCelebration(winnerElement);
       
+      // Epic victory screen flash
+      createEpicScreenFlash('rgba(255, 215, 0, 0.4)', 0.8);
     }
     
-    addLogEntry(`🎉 ${winner.name} is victorious! 🎉`, 'victory');
+    addLogEntry(`🎆 ${winner.name} ACHIEVES EPIC VICTORY! 🎆`, 'victory');
     setBattlesWon(prev => prev + 1);
+    
+    // Reset animation states
+    setAttackPhase('idle');
+    setCurrentAttacker(null);
   };
 
+  // 🔄 RESET BATTLE WITH CLEANUP
   const resetBattle = () => {
     clearInterval(battleInterval.current);
     setBattleActive(false);
     setBattleTurnActive(false);
+    
+    // 🧹 Clean up all animations and effects
+    currentAnimations.current.forEach(animation => {
+      if (animation && animation.kill) animation.kill();
+    });
+    currentAnimations.current = [];
+    
+    // Clean up CSS classes
+    if (creature1Ref.current) {
+      creature1Ref.current.className = creature1Ref.current.className
+        .replace(/\b(victory-glow|battle-ready|charging-aura|targeting-indicator|active-turn)\b/g, '')
+        .trim();
+    }
+    if (creature2Ref.current) {
+      creature2Ref.current.className = creature2Ref.current.className
+        .replace(/\b(victory-glow|battle-ready|charging-aura|targeting-indicator|active-turn)\b/g, '')
+        .trim();
+    }
+    
+    // Reset all states
     setCreature1(null);
     setCreature2(null);
     setSelectedCreatures([]);
     setGameState('selection');
     setBattleLog([]);
+    
+    // Reset animation states
+    setAttackPhase('idle');
+    setCurrentAttacker(null);
+    setDamageAmount(0);
+    setDamageType('normal');
+    setElementType('normal');
+    setIsSpecialAttack(false);
   };
 
   // Loading state
@@ -642,25 +647,66 @@ const BattleArenaEnhanced = () => {
     </div>
   );
 
-  // Render creature card for battle
-  const renderCreatureCard = (creature, cardId) => {
+  // 🎬 EPIC CREATURE CARD RENDERER - Enhanced with animation support
+  const renderEpicCreatureCard = (creature, cardId, isCreature1 = true) => {
     if (!creature) return null;
     
     const healthPercentage = Math.max(0, (creature.currentHp / creature.hp) * 100);
+    const isCriticalHealth = healthPercentage <= 25;
+    const isCurrentAttacker = currentAttacker === (isCreature1 ? 1 : 2);
+    
+    // Dynamic classes based on battle state
+    let cardClasses = `battle-container creature-card ${creature.type.toLowerCase()}-type gpu-accelerated`;
+    
+    // Add animation classes based on state
+    if (gameState === 'battle') {
+      cardClasses += ` battle-ready ${creature.type.toLowerCase()}-idle-glow`;
+    }
+    if (isCurrentAttacker && attackPhase === 'charging') {
+      cardClasses += ' charging-aura';
+    }
+    if (currentAttacker && currentAttacker !== (isCreature1 ? 1 : 2) && attackPhase === 'charging') {
+      cardClasses += ' targeting-indicator';
+    }
+    if (isCurrentAttacker) {
+      cardClasses += ' active-turn';
+    }
     
     return (
-      <div className={`creature-card ${creature.type.toLowerCase()}-type`} id={cardId}>
-        <img className="creature-image" src={getPetImage(creature)} alt={creature.name} />
-        <h3 className="creature-name">{creature.name}</h3>
+      <div 
+        className={cardClasses}
+        id={cardId}
+        ref={isCreature1 ? creature1Ref : creature2Ref}
+      >
+        {/* 🎆 Battle particles background */}
+        <div className="battle-particles"></div>
+        
+        {/* 🐈 Creature image - STAYS STATIC as requested */}
+        <img 
+          className="creature-image" 
+          src={getPetImage(creature)} 
+          alt={creature.name}
+          style={{ position: 'relative', zIndex: 3 }}
+        />
+        
+        {/* 🏷️ Creature name with dynamic glow */}
+        <h3 className={`creature-name ${isCurrentAttacker ? 'idle-glow' : ''}`}>
+          {creature.name}
+        </h3>
+        
+        {/* ❤️ Epic health bar with refs for animation */}
         <div className="health-bar">
           <div 
-            className={`health-fill ${healthPercentage <= 25 ? 'critical' : ''}`}
+            ref={isCreature1 ? healthBar1Ref : healthBar2Ref}
+            className={`health-fill ${isCriticalHealth ? 'critical-health-pulse' : ''}`}
             style={{ width: `${healthPercentage}%` }}
           />
           <span className="health-text">
             {Math.max(0, Math.floor(creature.currentHp))}/{creature.hp}
           </span>
         </div>
+        
+        {/* 📊 Enhanced stats display */}
         <div className="creature-stats">
           <div className="stat">
             <span className="stat-label">Attack</span>
@@ -672,20 +718,36 @@ const BattleArenaEnhanced = () => {
           </div>
           <div className="stat">
             <span className="stat-label">Type</span>
-            <span className="stat-value">{creature.type}</span>
+            <span className={`stat-value ${creature.type.toLowerCase()}-type-text`}>{creature.type}</span>
           </div>
           <div className="stat">
             <span className="stat-label">Special</span>
-            <span className="stat-value">{creature.special}</span>
+            <span className="stat-value special-ability">{creature.special}</span>
           </div>
         </div>
+        
+        {/* 🎯 Attack phase indicator */}
+        {isCurrentAttacker && attackPhase !== 'idle' && (
+          <div className="attack-phase-indicator">
+            {attackPhase === 'charging' && '⚡ CHARGING'}
+            {attackPhase === 'attacking' && '💥 ATTACKING'}
+            {attackPhase === 'impact' && '🎆 IMPACT'}
+          </div>
+        )}
       </div>
     );
   };
 
   return (
     <div className="sanctum-arena">
-      <style jsx>{`
+      <DevCheatPanel
+        onAddCoins={addCoins}
+        onUnlockAllPets={unlockAllPets}
+        onResetBattle={resetBattle}
+        onForceEnvironment={forceEnvironment}
+        onSetCreatureTier={setCreatureTier}
+      />
+      <style>{`
         * {
           margin: 0;
           padding: 0;
@@ -854,6 +916,59 @@ const BattleArenaEnhanced = () => {
           transition: all 0.3s ease;
           position: relative;
           overflow: hidden;
+          transform: translateZ(0); /* GPU acceleration */
+        }
+        
+        /* 🎆 Epic type-specific glows */
+        .creature-card.fire-type.battle-ready {
+          border-color: #ff6b6b;
+          box-shadow: 0 0 15px rgba(255, 107, 107, 0.4);
+        }
+        
+        .creature-card.water-type.battle-ready {
+          border-color: #4ecdc4;
+          box-shadow: 0 0 15px rgba(78, 205, 196, 0.4);
+        }
+        
+        .creature-card.earth-type.battle-ready {
+          border-color: #95e1d3;
+          box-shadow: 0 0 15px rgba(149, 225, 211, 0.4);
+        }
+        
+        .creature-card.air-type.battle-ready {
+          border-color: #a8e6cf;
+          box-shadow: 0 0 15px rgba(168, 230, 207, 0.4);
+        }
+        
+        /* 🎯 Attack phase indicator */
+        .attack-phase-indicator {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background: rgba(255, 215, 0, 0.9);
+          color: #000;
+          padding: 5px 10px;
+          border-radius: 15px;
+          font-size: 0.8rem;
+          font-weight: bold;
+          z-index: 25;
+          animation: phaseIndicatorPulse 1s ease-in-out infinite;
+        }
+        
+        @keyframes phaseIndicatorPulse {
+          0%, 100% { opacity: 0.9; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.05); }
+        }
+        
+        /* 🌈 Type-specific text colors */
+        .fire-type-text { color: #ff6b6b; }
+        .water-type-text { color: #4ecdc4; }
+        .earth-type-text { color: #95e1d3; }
+        .air-type-text { color: #a8e6cf; }
+        
+        .special-ability {
+          color: #ffd700;
+          font-weight: bold;
         }
 
         .creature-card.fire-type { border-color: #ff6b6b; }
@@ -1005,6 +1120,31 @@ const BattleArenaEnhanced = () => {
           font-weight: bold;
           color: #ff6b6b;
           text-shadow: 0 0 20px rgba(255, 107, 107, 0.8);
+          transition: all 0.3s ease;
+          transform: translateZ(0);
+        }
+        
+        .vs-display.battle-active {
+          color: #ffd700;
+          text-shadow: 0 0 30px rgba(255, 215, 0, 0.9);
+          animation: battleVsPulse 2s ease-in-out infinite alternate;
+        }
+        
+        .vs-display.combat-active {
+          color: #ff1744;
+          text-shadow: 0 0 40px rgba(255, 23, 68, 1);
+          transform: scale(1.2);
+        }
+        
+        @keyframes battleVsPulse {
+          0% {
+            transform: scale(1);
+            filter: brightness(1);
+          }
+          100% {
+            transform: scale(1.1);
+            filter: brightness(1.3);
+          }
         }
 
         /* Battle Controls */
@@ -1120,15 +1260,14 @@ const BattleArenaEnhanced = () => {
             <>
               {/* Battle Arena */}
               <div className="battle-arena">
-                {renderCreatureCard(creature1, 'creature1Card')}
+                {renderEpicCreatureCard(creature1, 'creature1Card', true)}
                 
-                {/* VS Display */}
-                <div className="vs-display" ref={(el) => {
-                  if (el && gameState === 'battle') {
-                  }
-                }}>VS</div>
+                {/* 🆚 Epic VS Display with battle state */}
+                <div className={`vs-display ${battleActive ? 'battle-active' : ''} ${attackPhase !== 'idle' ? 'combat-active' : ''}`}>
+                  {attackPhase === 'idle' ? 'VS' : '💥'}
+                </div>
 
-                {renderCreatureCard(creature2, 'creature2Card')}
+                {renderEpicCreatureCard(creature2, 'creature2Card', false)}
               </div>
 
               {/* Battle Controls */}

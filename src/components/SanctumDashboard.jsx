@@ -8,6 +8,8 @@ function SanctumDashboard() {
   const [sanctumData, setSanctumData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [expandedCard, setExpandedCard] = useState(null);
+  const [animatingValues, setAnimatingValues] = useState({});
 
   useEffect(() => {
     const getSanctum = async () => {
@@ -38,6 +40,34 @@ function SanctumDashboard() {
       getSanctum();
     }
   }, [token]);
+
+  // Animated counter hook
+  const useAnimatedCounter = (target, duration = 1000) => {
+    const [count, setCount] = useState(0);
+    
+    useEffect(() => {
+      let start = 0;
+      const increment = target / (duration / 16);
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= target) {
+          setCount(target);
+          clearInterval(timer);
+        } else {
+          setCount(Math.floor(start));
+        }
+      }, 16);
+      
+      return () => clearInterval(timer);
+    }, [target, duration]);
+    
+    return count;
+  };
+
+  // Toggle card expansion
+  const toggleCard = (cardId) => {
+    setExpandedCard(expandedCard === cardId ? null : cardId);
+  };
 
   if (loading) {
     return (
@@ -95,7 +125,11 @@ function SanctumDashboard() {
       {/* Stats Grid */}
       <section style={statsContainerStyles}>
         <div style={statsGridStyles}>
-          <div style={{...statCardStyles, ...collectionCardStyles}}>
+          <div 
+            style={{...statCardStyles, ...collectionCardStyles, ...(expandedCard === 'collection' ? expandedCardStyles : {})}} 
+            className="clickable-card"
+            onClick={() => toggleCard('collection')}
+          >
             <div style={statIconStyles}>📊</div>
             <h3 style={statTitleStyles}>Collection</h3>
             <p style={statValueStyles}>
@@ -107,27 +141,141 @@ function SanctumDashboard() {
                 width: `${(sanctumData.stats.totalCreatures / sanctumData.stats.capacity) * 100}%`
               }}></div>
             </div>
+            
+            {expandedCard === 'collection' && (
+              <div style={expandedContentStyles}>
+                <div style={expandedStatsStyles}>
+                  <div style={expandedStatItemStyles}>
+                    <span>Capacity Utilization</span>
+                    <span style={expandedStatValueStyles}>{Math.round((sanctumData.stats.totalCreatures / sanctumData.stats.capacity) * 100)}%</span>
+                  </div>
+                  <div style={expandedStatItemStyles}>
+                    <span>Available Slots</span>
+                    <span style={expandedStatValueStyles}>{sanctumData.stats.capacity - sanctumData.stats.totalCreatures}</span>
+                  </div>
+                  <div style={expandedStatItemStyles}>
+                    <span>Tier Bonus</span>
+                    <span style={expandedStatValueStyles}>+{sanctumData.stats.capacity - 20} slots</span>
+                  </div>
+                </div>
+                <div style={expandedDescStyles}>
+                  Your {sanctumData.tier} tier grants enhanced collection capacity. Continue growing your prestige to unlock even more slots!
+                </div>
+              </div>
+            )}
           </div>
 
-          <div style={{...statCardStyles, ...prestigeCardStyles}}>
+          <div 
+            style={{...statCardStyles, ...prestigeCardStyles, ...(expandedCard === 'prestige' ? expandedCardStyles : {})}} 
+            className="clickable-card"
+            onClick={() => toggleCard('prestige')}
+          >
             <div style={statIconStyles}>👑</div>
             <h3 style={statTitleStyles}>Total Prestige</h3>
-            <p style={statValueStyles}>{sanctumData.stats.totalPrestige.toLocaleString()}</p>
-            <p style={statDescStyles}>Average: {sanctumData.stats.averagePrestige}</p>
+            <PrestigeCounter 
+              target={sanctumData.stats.totalPrestige} 
+              isExpanded={expandedCard === 'prestige'}
+              averagePrestige={sanctumData.stats.averagePrestige}
+            />
+            
+            {expandedCard === 'prestige' && (
+              <div style={expandedContentStyles}>
+                <div style={expandedStatsStyles}>
+                  {sanctumData.collection.creatures.length > 0 ? (
+                    <>
+                      <div style={expandedStatItemStyles}>
+                        <span>Highest Creature</span>
+                        <span style={expandedStatValueStyles}>{Math.max(...sanctumData.collection.creatures.map(c => c.meta.prestigeValue))}</span>
+                      </div>
+                      <div style={expandedStatItemStyles}>
+                        <span>Lowest Creature</span>
+                        <span style={expandedStatValueStyles}>{Math.min(...sanctumData.collection.creatures.map(c => c.meta.prestigeValue))}</span>
+                      </div>
+                      <div style={expandedStatItemStyles}>
+                        <span>Prestige Range</span>
+                        <span style={expandedStatValueStyles}>{Math.max(...sanctumData.collection.creatures.map(c => c.meta.prestigeValue)) - Math.min(...sanctumData.collection.creatures.map(c => c.meta.prestigeValue))}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <div style={expandedStatItemStyles}>
+                      <span>No creatures yet</span>
+                      <span style={expandedStatValueStyles}>Start collecting!</span>
+                    </div>
+                  )}
+                </div>
+                <div style={expandedDescStyles}>
+                  Your prestige determines your sanctum tier. Higher prestige creatures unlock greater evolution bonuses and tier benefits!
+                </div>
+              </div>
+            )}
           </div>
 
-          <div style={{...statCardStyles, ...bonusCardStyles}}>
+          <div 
+            style={{...statCardStyles, ...bonusCardStyles, ...(expandedCard === 'bonus' ? expandedCardStyles : {})}} 
+            className="clickable-card"
+            onClick={() => toggleCard('bonus')}
+          >
             <div style={statIconStyles}>⚡</div>
             <h3 style={statTitleStyles}>Evolution Bonus</h3>
             <p style={statValueStyles}>+{Math.round((sanctumData.stats.evolutionBonus - 1) * 100)}%</p>
             <p style={statDescStyles}>Power Multiplier</p>
+            
+            {expandedCard === 'bonus' && (
+              <div style={expandedContentStyles}>
+                <div style={expandedStatsStyles}>
+                  <div style={expandedStatItemStyles}>
+                    <span>Base Multiplier</span>
+                    <span style={expandedStatValueStyles}>1.0x</span>
+                  </div>
+                  <div style={expandedStatItemStyles}>
+                    <span>Current Multiplier</span>
+                    <span style={expandedStatValueStyles}>{sanctumData.stats.evolutionBonus.toFixed(2)}x</span>
+                  </div>
+                  <div style={expandedStatItemStyles}>
+                    <span>Bonus Gained</span>
+                    <span style={expandedStatValueStyles}>+{(sanctumData.stats.evolutionBonus - 1).toFixed(2)}x</span>
+                  </div>
+                </div>
+                <div style={expandedDescStyles}>
+                  Evolution bonuses are earned through creature diversity and tier progression. Each new tier unlocks enhanced multipliers!
+                </div>
+              </div>
+            )}
           </div>
 
-          <div style={{...statCardStyles, ...currencyCardStyles}}>
+          <div 
+            style={{...statCardStyles, ...currencyCardStyles, ...(expandedCard === 'currency' ? expandedCardStyles : {})}} 
+            className="clickable-card"
+            onClick={() => toggleCard('currency')}
+          >
             <div style={statIconStyles}>🪙</div>
             <h3 style={statTitleStyles}>Dragon Coins</h3>
-            <p style={statValueStyles}>{sanctumData.user.currency}</p>
-            <p style={statDescStyles}>Currency</p>
+            <CurrencyCounter 
+              target={sanctumData.user.currency} 
+              isExpanded={expandedCard === 'currency'}
+            />
+            
+            {expandedCard === 'currency' && (
+              <div style={expandedContentStyles}>
+                <div style={expandedStatsStyles}>
+                  <div style={expandedStatItemStyles}>
+                    <span>Spending Power</span>
+                    <span style={expandedStatValueStyles}>{sanctumData.user.currency > 1000 ? 'High' : sanctumData.user.currency > 500 ? 'Medium' : 'Low'}</span>
+                  </div>
+                  <div style={expandedStatItemStyles}>
+                    <span>Currency Tier</span>
+                    <span style={expandedStatValueStyles}>{sanctumData.user.currency > 2000 ? 'Wealthy' : sanctumData.user.currency > 1000 ? 'Comfortable' : 'Growing'}</span>
+                  </div>
+                  <div style={expandedStatItemStyles}>
+                    <span>Next Goal</span>
+                    <span style={expandedStatValueStyles}>{sanctumData.user.currency < 1000 ? '1,000' : sanctumData.user.currency < 2000 ? '2,000' : '5,000'}</span>
+                  </div>
+                </div>
+                <div style={expandedDescStyles}>
+                  Dragon Coins are earned through creature hunting and achievements. Use them to unlock premium sanctum upgrades!
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -188,6 +336,65 @@ function SanctumDashboard() {
 
       <Footer />
     </div>
+  );
+}
+
+// Animated Counter Components
+function PrestigeCounter({ target, isExpanded, averagePrestige }) {
+  const [count, setCount] = useState(isExpanded ? 0 : target);
+  
+  useEffect(() => {
+    if (isExpanded) {
+      let start = 0;
+      const increment = target / 60; // 1 second animation
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= target) {
+          setCount(target);
+          clearInterval(timer);
+        } else {
+          setCount(Math.floor(start));
+        }
+      }, 16);
+      
+      return () => clearInterval(timer);
+    }
+  }, [isExpanded, target]);
+  
+  return (
+    <>
+      <p style={statValueStyles}>{count.toLocaleString()}</p>
+      <p style={statDescStyles}>Average: {averagePrestige}</p>
+    </>
+  );
+}
+
+function CurrencyCounter({ target, isExpanded }) {
+  const [count, setCount] = useState(isExpanded ? 0 : target);
+  
+  useEffect(() => {
+    if (isExpanded) {
+      let start = 0;
+      const increment = target / 60; // 1 second animation
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= target) {
+          setCount(target);
+          clearInterval(timer);
+        } else {
+          setCount(Math.floor(start));
+        }
+      }, 16);
+      
+      return () => clearInterval(timer);
+    }
+  }, [isExpanded, target]);
+  
+  return (
+    <>
+      <p style={statValueStyles}>{count}</p>
+      <p style={statDescStyles}>Currency</p>
+    </>
   );
 }
 
@@ -291,7 +498,55 @@ const statCardStyles = {
   textAlign: 'center',
   boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
   border: '3px solid transparent',
-  transition: 'all 0.3s ease'
+  transition: 'all 0.3s ease',
+  cursor: 'pointer',
+  position: 'relative'
+};
+
+const expandedCardStyles = {
+  transform: 'scale(1.02)',
+  boxShadow: '0 20px 40px rgba(0, 0, 0, 0.2)',
+  zIndex: 10
+};
+
+const expandedContentStyles = {
+  marginTop: '20px',
+  padding: '20px',
+  borderTop: '2px solid #f0f0f0',
+  textAlign: 'left',
+  animation: 'slideDown 0.3s ease-out'
+};
+
+const expandedStatsStyles = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '12px',
+  marginBottom: '15px'
+};
+
+const expandedStatItemStyles = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: '8px 0',
+  borderBottom: '1px solid #f0f0f0'
+};
+
+const expandedStatValueStyles = {
+  fontWeight: 'bold',
+  color: '#2c3e50',
+  fontSize: '1.1rem'
+};
+
+const expandedDescStyles = {
+  fontSize: '0.9rem',
+  color: '#6c757d',
+  fontStyle: 'italic',
+  lineHeight: '1.4',
+  background: 'rgba(255, 255, 255, 0.8)',
+  padding: '10px',
+  borderRadius: '8px',
+  border: '1px solid #e9ecef'
 };
 
 const collectionCardStyles = {
@@ -489,9 +744,36 @@ if (typeof window !== 'undefined') {
       50% { transform: translateY(-15px) rotate(5deg); }
     }
     
-    .page-container [style*="statCardStyles"]:hover {
-      transform: translateY(-5px);
+    @keyframes slideDown {
+      0% { 
+        opacity: 0; 
+        transform: translateY(-20px); 
+        max-height: 0;
+      }
+      100% { 
+        opacity: 1; 
+        transform: translateY(0); 
+        max-height: 500px;
+      }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { 
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
+      }
+      50% { 
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), 0 0 0 4px rgba(255, 215, 0, 0.3); 
+      }
+    }
+    
+    .clickable-card {
+      animation: pulse 3s ease-in-out infinite;
+    }
+    
+    .clickable-card:hover {
+      transform: translateY(-5px) scale(1.02);
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      animation: none;
     }
     
     .page-container [style*="collectionLinkStyles"]:hover {
